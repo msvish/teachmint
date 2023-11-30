@@ -26,8 +26,10 @@ const Directory = () => {
     };
   }, []);
 
-  const displayProfile = () => {
-    navigate("profile");
+  const displayProfile = (id) => {
+    navigate("profile", {
+      state: { userDetails: users, target: id },
+    });
   };
 
   return (
@@ -41,39 +43,36 @@ const Directory = () => {
       >
         Directory
       </div>
-      <div>
-        {users.map((user, ind) => {
-          return (
-            <div
+      {users.map((user) => {
+        return (
+          <div key={user.id} style={{ padding: "15px 15px 15px 15px" }}>
+            <Card
+              id={`${user.id}`}
               key={user.id}
-              style={{ padding: "15px 15px 15px 15px" }}
-              id={ind}
+              elevation={3}
+              style={{ cursor: "pointer" }}
+              sx={{ minWidth: 800, minHeight: 60 }}
+              onClick={(e) => {
+                displayProfile(e.target.id);
+              }}
             >
-              <Card
-                elevation={3}
-                style={{ cursor: "pointer" }}
-                sx={{ minWidth: 800, minHeight: 60 }}
-                onClick={() => {
-                  displayProfile();
+              <div
+                id={`${user.id}`}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  padding: "20px 20px 20px 20px",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                    padding: "20px 20px 20px 20px",
-                  }}
-                >
-                  <div>{`Name : ${user.name}`}</div>
-                  <div>{`Posts :${user.posts.length}`}</div>
-                </div>
-              </Card>
-            </div>
-          );
-        })}
-      </div>
+                <div>{`Name : ${user.name}`}</div>
+                <div>{`Posts :${user.posts.length}`}</div>
+              </div>
+            </Card>
+          </div>
+        );
+      })}
     </div>
   );
 };
