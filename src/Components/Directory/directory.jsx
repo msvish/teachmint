@@ -16,6 +16,7 @@ const Directory = () => {
           .then((posts) => {
             users.map((user, ind) => {
               user["posts"] = posts.filter((post) => post.userId === user.id);
+              return;
             });
             setUsers(users);
           });

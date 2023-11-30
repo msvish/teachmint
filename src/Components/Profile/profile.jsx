@@ -25,7 +25,7 @@ const Profile = () => {
       const time = localDateTimeString.split(",")[1].slice(0, -2).split(":");
       setSeconds(Number(time[0]) * 60 * 60 + Number(time[1]) * 60 + Number(2));
     }
-  }, [stdTime]);
+  }, [stdTime, countryOpt]);
 
   useEffect(() => {
     let interval;
