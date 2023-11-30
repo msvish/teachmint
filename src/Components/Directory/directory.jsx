@@ -2,27 +2,24 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
-import Profile from "../Profile/profile";
 
 const Directory = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    return () => {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((response) => response.json())
-        .then((users) => {
-          fetch("https://jsonplaceholder.typicode.com/posts")
-            .then((response) => response.json())
-            .then((posts) => {
-              users.map((user, ind) => {
-                user["posts"] = posts.filter((post) => post.userId === user.id);
-              });
-              setUsers(users);
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((users) => {
+        fetch("https://jsonplaceholder.typicode.com/posts")
+          .then((response) => response.json())
+          .then((posts) => {
+            users.map((user, ind) => {
+              user["posts"] = posts.filter((post) => post.userId === user.id);
             });
-        });
-    };
+            setUsers(users);
+          });
+      });
   }, []);
 
   const displayProfile = (id) => {

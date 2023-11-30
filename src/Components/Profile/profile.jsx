@@ -41,11 +41,9 @@ const Profile = () => {
   }, [isTimer, seconds]);
 
   useEffect(() => {
-    return () => {
-      fetch("http://worldtimeapi.org/api/timezone")
-        .then((response) => response.json())
-        .then((countries) => setCountries(countries));
-    };
+    fetch("http://worldtimeapi.org/api/timezone")
+      .then((response) => response.json())
+      .then((countries) => setCountries(countries));
   }, []);
 
   useEffect(() => {
