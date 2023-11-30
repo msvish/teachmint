@@ -23,7 +23,6 @@ const Profile = () => {
       setDay(days[utcDateTime.getUTCDay()]);
       setDate(localDateTimeString.split(",")[0].split("/"));
       const time = localDateTimeString.split(",")[1].slice(0, -2).split(":");
-      console.log(time);
       setSeconds(Number(time[0]) * 60 * 60 + Number(time[1]) * 60 + Number(2));
     }
   }, [stdTime]);
@@ -38,7 +37,6 @@ const Profile = () => {
     } else if (!isTimer && seconds !== 0) {
       clearInterval(interval);
     }
-    console.log(seconds);
     return () => clearInterval(interval);
   }, [isTimer, seconds]);
 
@@ -96,7 +94,6 @@ const Profile = () => {
           <select
             style={{ alignItemsq: "centre" }}
             onChange={(event) => {
-              console.log(event.target.value);
               setCountryOpt(event.target.value);
               fetch(
                 `http://worldtimeapi.org/api/timezone/${event.target.value}`
@@ -138,7 +135,7 @@ const Profile = () => {
         </div>
         <div>
           {" "}
-          <button onClick={stopTimer}>Stop</button>
+          {isTimer && <button onClick={stopTimer}>Stop</button>}
           {!isTimer && seconds > 0 && (
             <button onClick={startTimer}>Resume</button>
           )}
@@ -216,7 +213,7 @@ const Profile = () => {
       >
         {currentUser.posts.slice(0, 3).map((post, index) => {
           return (
-            <Card key={index} minHeight={80}>
+            <Card key={index}>
               <div
                 style={{
                   display: "grid",
