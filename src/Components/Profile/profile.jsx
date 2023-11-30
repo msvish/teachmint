@@ -1,14 +1,70 @@
 import { Card } from "@mui/material";
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Profile = () => {
+  const [countries, setCountries] = useState([]);
+  const [seconds, setSeconds] = useState(0);
+  const [isTimer, setIsTimer] = useState(true);
+  const [countryOpt, setCountryOpt] = useState("");
+  const [stdTime, setStdTime] = useState(null);
+  const [date, setDate] = useState([0, 0, 0]);
+  const [day, setDay] = useState("non");
+
+  useEffect(() => {
+    if (stdTime !== null) {
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const utcDateTime = new Date(stdTime.utc_datetime);
+      const localDateTimeString = utcDateTime.toLocaleString("en-US", {
+        timeZone: countryOpt,
+      });
+
+      setDay(days[utcDateTime.getUTCDay()]);
+      setDate(localDateTimeString.split(",")[0].split("/"));
+      const time = localDateTimeString.split(",")[1].slice(0, -2).split(":");
+      console.log(time);
+      setSeconds(Number(time[0]) * 60 * 60 + Number(time[1]) * 60 + Number(2));
+    }
+  }, [stdTime]);
+
+  useEffect(() => {
+    let interval;
+
+    if (isTimer) {
+      interval = setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds + 1);
+      }, 1000);
+    } else if (!isTimer && seconds !== 0) {
+      clearInterval(interval);
+    }
+    console.log(seconds);
+    return () => clearInterval(interval);
+  }, [isTimer, seconds]);
+
+  useEffect(() => {
+    return () => {
+      fetch("http://worldtimeapi.org/api/timezone")
+        .then((response) => response.json())
+        .then((countries) => setCountries(countries));
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {};
+  }, [countryOpt]);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { userDetails, target } = location.state;
-  console.log(userDetails, target);
   const currentUser = userDetails.find((user) => user.id === Number(target));
-  console.log(currentUser);
+  const startTimer = () => {
+    setIsTimer(true);
+  };
+
+  const stopTimer = () => {
+    setIsTimer(false);
+  };
   return (
     <div
       style={{
@@ -23,16 +79,70 @@ const Profile = () => {
           padding: "15px 15px 15px 15px",
           display: "flex",
           flexDirection: "row",
-          alignContent: "space-evenly",
+          justifyContent: "space-between",
         }}
       >
-        <button
-          onClick={() => {
-            navigate("/");
+        <div>
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Back
+          </button>
+        </div>
+
+        <div>
+          <select
+            style={{ alignItemsq: "centre" }}
+            onChange={(event) => {
+              console.log(event.target.value);
+              setCountryOpt(event.target.value);
+              fetch(
+                `http://worldtimeapi.org/api/timezone/${event.target.value}`
+              )
+                .then((response) => response.json())
+                .then((time) => {
+                  setStdTime(time);
+                });
+            }}
+          >
+            <option value="none">Select Country</option>
+            {countries.map((country, index) => {
+              return (
+                <option key={index} value={country}>
+                  {country}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div
+          style={{
+            backgroundColor: "black",
+            width: "150px",
+            height: "50px",
+            display: "grid",
+            gridTemplateRow: "auto auto",
+            gridRowGap: "5px",
+            padding: "15px 5px 5px 5px",
+            borderRadius: "5px",
           }}
         >
-          Back
-        </button>
+          <div
+            style={{ color: "white", fontSize: "10px" }}
+          >{`${date[2]}-${date[1]}-${date[0]} ${day}`}</div>
+          <div style={{ color: "white", fontSize: "25px" }}>{`${Math.floor(
+            seconds / 3600
+          )} : ${Math.floor((seconds % 3600) / 60)} : ${seconds % 60} `}</div>
+        </div>
+        <div>
+          {" "}
+          <button onClick={stopTimer}>Stop</button>
+          {!isTimer && seconds > 0 && (
+            <button onClick={startTimer}>Resume</button>
+          )}
+        </div>
       </div>
       <div>
         <div
