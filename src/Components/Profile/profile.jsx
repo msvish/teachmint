@@ -46,10 +46,6 @@ const Profile = () => {
       .then((countries) => setCountries(countries));
   }, []);
 
-  useEffect(() => {
-    return () => {};
-  }, [countryOpt]);
-
   const navigate = useNavigate();
   const location = useLocation();
   const { userDetails, target } = location.state;
@@ -62,172 +58,175 @@ const Profile = () => {
     setIsTimer(false);
   };
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "grid",
-        gridTemplateRows: "10% 80% 60%",
-        gridRowGap: "20px",
-      }}
-    >
+    <div>
       <div
         style={{
-          padding: "15px 15px 15px 15px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
+          position: "relative",
+          display: "grid",
+          gridTemplateRows: "10% 80% 60%",
+          gridRowGap: "20px",
         }}
       >
-        <div>
-          <button
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            Back
-          </button>
-        </div>
-
-        <div>
-          <select
-            style={{ alignItemsq: "centre" }}
-            onChange={(event) => {
-              setCountryOpt(event.target.value);
-              fetch(
-                `http://worldtimeapi.org/api/timezone/${event.target.value}`
-              )
-                .then((response) => response.json())
-                .then((time) => {
-                  setStdTime(time);
-                });
-            }}
-          >
-            <option value="none">Select Country</option>
-            {countries.map((country, index) => {
-              return (
-                <option key={index} value={country}>
-                  {country}
-                </option>
-              );
-            })}
-          </select>
-        </div>
         <div
           style={{
-            backgroundColor: "black",
-            width: "150px",
-            height: "50px",
-            display: "grid",
-            gridTemplateRow: "auto auto",
-            gridRowGap: "5px",
-            padding: "15px 5px 5px 5px",
-            borderRadius: "5px",
-          }}
-        >
-          <div
-            style={{ color: "white", fontSize: "10px" }}
-          >{`${date[2]}-${date[1]}-${date[0]} ${day}`}</div>
-          <div style={{ color: "white", fontSize: "25px" }}>{`${Math.floor(
-            seconds / 3600
-          )} : ${Math.floor((seconds % 3600) / 60)} : ${seconds % 60} `}</div>
-        </div>
-        <div>
-          {" "}
-          {isTimer && <button onClick={stopTimer}>Stop</button>}
-          {!isTimer && seconds > 0 && (
-            <button onClick={startTimer}>Resume</button>
-          )}
-        </div>
-      </div>
-      <div>
-        <div
-          style={{
-            position: "relative",
-            alignContent: "center",
             padding: "15px 15px 15px 15px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
-          <div style={{ padding: "15px 15px 15px 15px" }}>
-            <b>Profile Page</b>
+          <div>
+            <button
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Back
+            </button>
           </div>
-          <Card
-            selevation={3}
-            style={{ cursor: "pointer" }}
-            sx={{ minWidth: 100, minHeight: 120 }}
+
+          <div>
+            <select
+              style={{ alignItemsq: "centre" }}
+              onChange={(event) => {
+                setCountryOpt(event.target.value);
+                fetch(
+                  `http://worldtimeapi.org/api/timezone/${event.target.value}`
+                )
+                  .then((response) => response.json())
+                  .then((time) => {
+                    setStdTime(time);
+                  });
+              }}
+            >
+              <option value="none">Select Country</option>
+              {countries.map((country, index) => {
+                return (
+                  <option key={index} value={country}>
+                    {country}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          <div
+            style={{
+              backgroundColor: "black",
+              width: "150px",
+              height: "50px",
+              display: "grid",
+              gridTemplateRow: "auto auto",
+              gridRowGap: "5px",
+              padding: "15px 5px 5px 5px",
+              borderRadius: "5px",
+            }}
           >
             <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                rowGap: "20px",
-                padding: "25px 25px 25px 25px",
-              }}
+              style={{ color: "white", fontSize: "10px" }}
+            >{`${date[2]}-${date[1]}-${date[0]} ${day}`}</div>
+            <div style={{ color: "white", fontSize: "25px" }}>{`${Math.floor(
+              seconds / 3600
+            )} : ${Math.floor((seconds % 3600) / 60)} : ${seconds % 60} `}</div>
+          </div>
+          <div>
+            {" "}
+            {isTimer && <button onClick={stopTimer}>Stop</button>}
+            {!isTimer && seconds > 0 && (
+              <button onClick={startTimer}>Resume</button>
+            )}
+          </div>
+        </div>
+        <div>
+          <div
+            style={{
+              position: "relative",
+              alignContent: "center",
+              padding: "15px 15px 15px 15px",
+            }}
+          >
+            <div style={{ padding: "15px 15px 15px 15px" }}>
+              <b>Profile Page</b>
+            </div>
+            <Card
+              selevation={3}
+              style={{ cursor: "pointer" }}
+              sx={{ minWidth: 100, minHeight: 120 }}
             >
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
+                  flexDirection: "column",
+                  rowGap: "20px",
+                  padding: "25px 25px 25px 25px",
                 }}
               >
-                <div>
-                  <b>Name</b>
-                  {` : ${currentUser.name} `}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div>
+                    <b>Name</b>
+                    {` : ${currentUser.name} `}
+                  </div>
+                  <div style={{ width: "15%", wordBreak: "break-all" }}>
+                    <b>Address </b>
+                    {`: ${currentUser.address.suite} , ${currentUser.address.street},  ${currentUser.address.city} ,  ${currentUser.address.zipcode} `}{" "}
+                  </div>
                 </div>
-                <div style={{ width: "15%", wordBreak: "break-all" }}>
-                  <b>Address </b>
-                  {`: ${currentUser.address.suite} , ${currentUser.address.street},  ${currentUser.address.city} ,  ${currentUser.address.zipcode} `}{" "}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div style={{ width: "15%", wordBreak: "break-all" }}>
+                    <b>Username | Catch phrase</b>
+                    {` : ${currentUser.username} | ${currentUser.company.catchPhrase} `}{" "}
+                  </div>
+                  <div style={{ width: "15%", wordBreak: "break-all" }}>
+                    <b>Email | Phone </b>
+                    {`: ${currentUser.email} | ${currentUser.phone}`}{" "}
+                  </div>
                 </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div style={{ width: "15%", wordBreak: "break-all" }}>
-                  <b>Username | Catch phrase</b>
-                  {` : ${currentUser.username} | ${currentUser.company.catchPhrase} `}{" "}
-                </div>
-                <div style={{ width: "15%", wordBreak: "break-all" }}>
-                  <b>Email | Phone </b>
-                  {`: ${currentUser.email} | ${currentUser.phone}`}{" "}
-                </div>
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
-      <div
-        style={{
-          padding: "0px 15px 0px 15px",
-          display: "grid",
-          gridTemplateColumns: "auto auto auto",
-          gridColumnGap: "5%",
-        }}
-      >
-        {currentUser.posts.slice(0, 3).map((post, index) => {
-          return (
-            <Card key={index}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateRows: "auto auto",
-                  gridRowGap: "20px",
-                  padding: "20px 20px 20px 20px",
-                }}
-              >
-                <div>
-                  <b>{post.title}</b>
-                </div>
-                <div>{post.body}</div>
               </div>
             </Card>
-          );
-        })}
+          </div>
+        </div>
+
+        <div
+          style={{
+            padding: "0px 15px 0px 15px",
+            display: "grid",
+            gridTemplateColumns: "auto auto auto",
+            gridColumnGap: "5%",
+          }}
+        >
+          {currentUser.posts.slice(0, 3).map((post, index) => {
+            return (
+              <Card key={index}>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateRows: "auto auto",
+                    gridRowGap: "20px",
+                    padding: "20px 20px 20px 20px",
+                  }}
+                >
+                  <div>
+                    <b>{post.title}</b>
+                  </div>
+                  <div>{post.body}</div>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
